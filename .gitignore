@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Database & Local Storage
+*.db
+*.db-journal
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Build outputs
+dist/
+release/
+out/
+build/
+
+# Environment & OS
+.env
+.env.local
+Thumbs.db
+.DS_Store
