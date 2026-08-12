@@ -1,10 +1,12 @@
 
-# User table
-Create table users(
-    id text primary key,
+# User Table
+Create table if not exists users(
+    id int primary key,
     name text not null,
     password text not null,
-    role text not null check(role in('admin', 'cashier'))
+    role text not null check(role in('admin', 'cashier')),
+    created_at default datetime,
+    deleted_at datetime,
 );
 
 +----+------+----------+------+------------+------------+
@@ -13,4 +15,27 @@ Create table users(
 +----+------+----------+------+------------+------------+
 
 
+# Racks Table
+Create table if not exists racks(
+    id int primary key,
+    rack_no int unique not null,
+)
 
++----+---------+
+| id | rack_no |
++----+---------+
++----+---------+
+
+
+# Payment Mode Table
+Create table if not exists payment_type(
+    id int primary key,
+    payment_type text unique not null check(payment_type in('Cash', 'Online', 'UPI', 'Credit')),
+)
+
++----+--------------+
+| id | payment_type |
++----+--------------+
++----+--------------+
+
+# Medicine Table
