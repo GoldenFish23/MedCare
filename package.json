@@ -4,7 +4,9 @@
   "description": "*",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:fresh": "node scripts/run-fresh-test.js",
+    "clean:test": "rimraf ./data_test"
   },
   "repository": {
     "type": "git",
