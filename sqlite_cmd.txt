@@ -69,3 +69,5 @@ Create table if not exists med_catg(
     sold_at datetime default current_timestamp,
 
 );
+
+
