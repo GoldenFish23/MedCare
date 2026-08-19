@@ -4,6 +4,7 @@
   "description": "*",
   "main": "index.js",
   "scripts": {
+    "key": "node ./src/backend/key.js",
     "start": "node ./src/backend/go.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:fresh": "node scripts/run-fresh-test.js",

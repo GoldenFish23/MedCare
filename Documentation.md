@@ -9,3 +9,5 @@ An local pc software to keep active tracking on medical supply and accountings.
 - setting.json : To store settings value of the application.
 - docker-compose.yml : Runner file for docker package for quick testing purpose.
 - dockerfile.dev : File to create a docker package for quick testing purpose.
+- src/backend/key.js: Creates an Application Key for the App Security.
+- 
