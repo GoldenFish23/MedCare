@@ -62,7 +62,7 @@ app.use(express.json());
 
 // const PORT = process.env.PORT || 5000;
 
-// Connection checks
+// Check route links at main page
 app.get('/',(req, res)=>{
     res.status(200).json({
         'API Health': '/api/status',
@@ -72,7 +72,7 @@ app.get('/',(req, res)=>{
     })
 });
 
-
+// Connection checks
 app.get('/api/status', (req, res) => {
     // console.log(`Hi`);
     res.status(200).json({
@@ -229,6 +229,7 @@ app.route('/supplier')
     // Deletion and update are missing
 
 
+// Managing medicine categories
 app.route('/medicine-cat')
     .get((req,res) => {
         let medCatg = null;
