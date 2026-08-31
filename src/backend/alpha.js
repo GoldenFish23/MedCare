@@ -17,6 +17,9 @@ const file_path = path.join(process.cwd(), 'passcode.txt');
 // Variables
 let db_instance = null;
 let lock_status = null;
+// for session track
+let session = null; /* Use Session for login and keeping activity trace */
+
 
 // Checks and Initalization of DB and Passcode file for Step 1 
 function db_existence() {
@@ -60,10 +63,20 @@ app.use(express.json());
 // const PORT = process.env.PORT || 5000;
 
 // Connection checks
+app.get('/',(req, res)=>{
+    res.status(200).json({
+        'API Health': '/api/status',
+        Users: '/user',
+        Supplier: '/supplier',
+        Medicine_Category : '/medicine-cat'
+    })
+});
+
+
 app.get('/api/status', (req, res) => {
     // console.log(`Hi`);
     res.status(200).json({
-        database: db ? 'connected' : 'disconnected',
+        database: db_i ? 'connected' : 'disconnected',
         timestamp: new Date().toISOString()
     })
 });
@@ -72,7 +85,7 @@ app.get('/api/status', (req, res) => {
 app.route('/user')
     .get((req, res) => {
         let user = null;
-        // Checks if db module is connected and not dbinstance  ---> Potential Bug
+        // Checks if db module is connected and not dbinstance  ---> Potential Bug (SOLVED)
         if(db_instance){
             // Query to process admin information
             user = db_instance.prepare(`
@@ -148,7 +161,7 @@ app.route('/user')
                     let createUser = db_instance.prepare(`
                         INSERT INTO users (username, password_hash, full_name, role_id, is_active)
                         VALUES (?, ?, ?, ?, ?)
-                        `).run(username, password_hash, full_name, role_id, is_active ?? 1);
+                    `).run(username, password_hash, full_name, role_id, is_active ?? 1);
                     res.status(200).json({
                         success: true,
                         message: 'User created successfully'});
@@ -163,8 +176,70 @@ app.route('/user')
             }
         }
     });
+    // DELETING & Updation USERS IS STILL MISSING.
+
+// // no login yet 
+// app.route('/login')
+
+// Manage suppliers
+app.route('/supplier')
+    .get((req, res) => {
+        let suppliers = null;
+        if(db_instance){
+            suppliers = db_instance.prepare(`
+                SELECT * 
+                FROM suppliers
+            `).all();
+            // let result = suppliers;
+            res.status(200).json(suppliers);
+        }
+    })
+    .post((req,res) => {
+        /* API structure
+        curl -X POST http://localhost:5000/supplier \
+        - H "Content-Type: application/json" \
+        - d '{
+            "name": "rahul",
+            "phone": "7507855915", 
+            "gstin": "UPGHIJR8593K5Z0",
+            "address": "full adress, any format",
+        }'
+        */
+        let {name, phone, gstin, address} = req.body;
+        try{
+            let createSupplier = db_instance.prepare(`
+                INSERT INTO suppliers (name, phone, gstin, address)
+                VALUES (?, ?, ?, ?)
+            `).run(name, phone, gstin, address);
+            res.status(200).json({
+                success: true,
+                message: 'Supplier created successfully.'
+            });
+        }
+        catch(err){
+            res.status(400).json({
+                success: false,
+                error: err.message
+            });
+        }
+        
+        // let supplier = null;
+        // supplier = req
+    });
+    // Deletion and update are missing
 
 
+app.route('/medicine-cat')
+    .get((req,res) => {
+        let medCatg = null;
+        if(db_instance){
+            medCatg = db_instance.prepare(`
+                SELECT *
+                FROM categories
+            `).all();
+            res.status(200).json(medCatg);
+        }
+    });
 
 app.listen(PORT, ()=>{
     console.log(`Server started on port: ${PORT}`);
