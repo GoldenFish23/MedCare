@@ -68,7 +68,8 @@ app.get('/',(req, res)=>{
         'API Health': '/api/status',
         Users: '/user',
         Supplier: '/supplier',
-        Medicine_Category : '/medicine-cat'
+        Medicine_Category : '/medicine-cat',
+        Medicine: '/medicine'
     })
 });
 
@@ -240,7 +241,78 @@ app.route('/medicine-cat')
             `).all();
             res.status(200).json(medCatg);
         }
+    })
+    .post((req, res) => {
+        let {name, description} = req.body;
+        try{
+            let createCategory = db_instance.prepare(`
+                INSERT INTO categories (name, description)
+                VALUES (?, ?)
+            `).run(name, description);
+            res.status(200).json({
+                success: true,
+                message: 'Medicine category created successfully.'
+            });
+        }
+        catch(err){
+            res.status(400).json({
+                success: false,
+                error: err.message
+            })
+        }
+    })
+    .delete((req, res) => {
+        let {id} = req.body;
+        try{
+            let deleteCategory = db_instance.prepare(`
+                DELETE FROM categories
+                WHERE id = ?
+            `).run(id);
+            res.status(200).json({
+                success: true,
+                message: 'Medicine category deleted successfully.'
+            });
+        }
+        catch(err){
+            res.status(400).json({
+                success: false,
+                error: err.message
+            })
+        }
     });
+
+
+app.route('/medicine')
+    .get((req, res) => {
+        let medicines = null;
+        if(db_instance){
+            medicines = db_instance.prepare(`
+                SELECT *
+                FROM medicines    
+            `).all();
+            res.status(200).json(medicines);
+        }
+    })
+    .post((req, res) => {
+        let {name, company, category_id, hsn_code, rack_number, gst_percent, min_stock_alert} = req.body;
+        try{
+            let createMedicine = db_instance.prepare(`
+                INSERT INTO medicines (name, company, category_id, hsn_code, rack_number, gst_percent, min_stock_alert)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            `).run(name, company, category_id, hsn_code, rack_number, gst_percent, min_stock_alert);
+            res.status(200).json({
+                success: true,
+                message: 'Medicine created successfully.'
+            });
+        }
+        catch(err){
+            res.status(400).json({
+                success: false,
+                error: err.message
+            });
+        }
+    });
+
 
 app.listen(PORT, ()=>{
     console.log(`Server started on port: ${PORT}`);
