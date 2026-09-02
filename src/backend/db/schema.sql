@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS medicines (
     rack_number TEXT,
     min_stock_alert INTEGER DEFAULT 10,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories (id)
+    FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE RESTRICT
 );
 
 -- 3. SUPPLIERS & CUSTOMERS
