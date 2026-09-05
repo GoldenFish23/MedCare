@@ -10,7 +10,7 @@ function gen_rand_key() {
 }
 
 // Creates an activation file for key storage
-function create_activation_file(filePath = path.join(__dirname, 'passcode.txt')) {
+function create_activation_file(filePath = path.join(__dirname, '..', 'passcode.txt')) {
     // For file exists
     if (fs.existsSync(filePath)) {
         const existingCode = fs.readFileSync(filePath, 'utf8').trim();
@@ -40,5 +40,10 @@ const file_path = path.join(process.cwd(), 'passcode.txt');
 
 console.log(`Activation file path: ${file_path}`);
 // console.log(`Activation code: ${create_activation_file(file_path)}`);
-create_activation_file(file_path);
+// create_activation_file(file_path);
 
+module.exports = {
+    // file_path,
+    gen_rand_key,
+    create_activation_file
+};
