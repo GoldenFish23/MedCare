@@ -6,6 +6,7 @@ const db_i = require('./db/db');
 const keya = require('./key');
 const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
+const db = require('./db/db');
 // const { log } = require('console');
 
 // Fixed Constants
@@ -82,7 +83,7 @@ app.get('/api/status', (req, res) => {
     })
 });
 
-// Check admin details via api
+// Check admin details via api (1)
 app.route('/user')
     .get((req, res) => {
         let user = null;
@@ -182,7 +183,7 @@ app.route('/user')
 // // no login yet 
 // app.route('/login')
 
-// Manage suppliers
+// Manage suppliers (2)
 app.route('/supplier')
     .get((req, res) => {
         let suppliers = null;
@@ -230,7 +231,7 @@ app.route('/supplier')
     // Deletion and update are missing
 
 
-// Managing medicine categories
+// Managing medicine categories (3)
 app.route('/medicine-cat')
     .get((req,res) => {
         let medCatg = null;
@@ -282,6 +283,7 @@ app.route('/medicine-cat')
     });
 
 
+// Managin medicine (4)
 app.route('/medicine')
     .get((req, res) => {
         let medicines = null;
@@ -312,6 +314,55 @@ app.route('/medicine')
             });
         }
     });
+
+
+// Managing Batches (5)
+app.route('/med-batch')
+    .get((req, res) => {
+        let med_batch = null;
+        if(db_instance){
+            med_batch = db_instance.prepare(`
+                SELECT 
+                    mb.id AS Id,
+                    m.name,
+                    m.company,
+                    m.category_id,
+                    mb.batch_number,
+                    mb.expiry_date,
+                    mb.current_stock,
+                    mb.purchase_price,
+                    mb.selling_price,
+                    mb.mrp
+                FROM medicine_batches AS mb
+                JOIN medicines AS m
+                ON mb.medicine_id = m.id
+            `).all();
+            res.status(200).json(med_batch);
+        } 
+    })
+    .post((req, res) => {
+        let {medicine_id, batch_number, expiry_date, purchase_price, selling_price, mrp, current_stock} = req.body;
+        try{
+            let create_med_batch = db_instance.prepare(`
+                INSERT INTO medicine_batches (medicine_id, batch_number, expiry_date, purchase_price, selling_price, mrp, current_stock)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            `).run(medicine_id, batch_number, expiry_date, purchase_price, selling_price, mrp, current_stock)
+            res.status(200).json({
+            success: true,
+            message: 'Medicine created successfully.'
+            });
+        }   
+        catch(err){
+            res.status(400).json({
+                success: false,
+                error: err.message
+            });
+        }
+    });
+
+// 
+app.route()
+
 
 
 app.listen(PORT, ()=>{
