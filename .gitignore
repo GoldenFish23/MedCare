@@ -1,3 +1,28 @@
+<<<<<<< HEAD
 /node_modules
 /node_env
 /data_test
+=======
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Database & Local Storage
+*.db
+*.db-journal
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Build outputs
+dist/
+release/
+out/
+build/
+
+# Environment & OS
+.env
+.env.local
+Thumbs.db
+.DS_Store
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb

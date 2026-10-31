@@ -1,0 +1,74 @@
+
+
+# User Table
+Create table if not exists users(
+    id int primary key,
+    name text not null,
+    password text not null,
+    role text not null check(role in('admin', 'cashier')),
+    created_at default datetime,
+    deleted_at datetime
+);
+
++----+------+----------+------+------------+------------+
+| id | name | password | role | created_at | deleted_at |
++----+------+----------+------+------------+------------+
++----+------+----------+------+------------+------------+
+
+
+# Racks Table
+Create table if not exists racks(
+    id int primary key,
+    rack_no int unique not null
+);
+
++----+---------+
+| id | rack_no |
++----+---------+
++----+---------+
+
+
+# Payment Mode Table
+Create table if not exists payment_type(
+    id int primary key,
+    payment_type text unique not null check(payment_type in('Cash', 'Card', 'UPI', 'Credit'))
+);
+
++----+--------------+
+| id | payment_type |
++----+--------------+
++----+--------------+
+
+# Medicine Category Table
+Create table if not exists med_catg(
+    id int primary key,
+    med_type text unique not null check(payment_type in('Tablet', 'Syrup', 'Injection', 'Capsule', 'Cream'))
+)
+
++----+----------+
+| id | med_type |
++----+----------+
++----+----------+
+
+# Med Table
+Create table if not exists medicine(
+    id int primary key,
+    payment_mode text 
+    med_type text unique not null check(payment_type in('Tablet', 'Syrup', 'Injection', 'Capsule', 'Cream'))
+    discount real default 0,
+    sold_at datetime default current_timestamp,
+
+);
+
+
+# Sales Table
+Create table if not exists med_catg(
+    id int primary key,
+    payment_mode text 
+    med_type text unique not null check(payment_type in('Tablet', 'Syrup', 'Injection', 'Capsule', 'Cream'))
+    discount real default 0,
+    sold_at datetime default current_timestamp,
+
+);
+
+
