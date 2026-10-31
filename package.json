@@ -1,4 +1,14 @@
 {
+<<<<<<< HEAD
+  "name": "medcare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "key": "node ./src/backend/key.js",
+    "server": "node ./src/backend/server_cp.js",
+    "start": " cross-env NODE_ENV=production node ./src/backend/server_cp.js"
+=======
   "name": "medical",
   "version": "1.0.0",
   "description": "*",
@@ -13,11 +23,24 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GoldenFish23/MediCal.git"
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+<<<<<<< HEAD
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.3",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1",
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+=======
   "bugs": {
     "url": "https://github.com/GoldenFish23/MediCal/issues"
   },
@@ -32,5 +55,6 @@
     "electron": "^43.3.0",
     "electron-builder": "^26.15.3",
     "vite": "^8.2.1"
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
   }
 }

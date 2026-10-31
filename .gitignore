@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+/node_modules
+/node_env
+/data_test
+=======
 # Dependencies
 node_modules/
 .pnpm-store/
@@ -20,3 +25,4 @@ build/
 .env.local
 Thumbs.db
 .DS_Store
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb

@@ -11,9 +11,15 @@ CREATE TABLE IF NOT EXISTS roles (
 
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+<<<<<<< HEAD
+    username TEXT UNIQUE NOT NULL CHECK (length(username) BETWEEN 3 AND 30),
+    password_hash TEXT NOT NULL CHECK (length(password_hash) <= 256),
+    full_name TEXT NOT NULL CHECK (length(full_name) BETWEEN 2 AND 100),
+=======
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     full_name TEXT NOT NULL,
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
     role_id INTEGER NOT NULL,
     is_active INTEGER DEFAULT 1 CHECK (is_active IN (0, 1)),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -26,18 +32,32 @@ INSERT OR IGNORE INTO roles (id, name) VALUES (1, 'ADMIN'), (2, 'CASHIER');
 -- 2. CATEGORIES & MEDICINES
 CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+<<<<<<< HEAD
+    name TEXT UNIQUE NOT NULL CHECK (length(name) BETWEEN 2 AND 60),
+    description TEXT CHECK (description IS NULL OR length(description) <= 150)
+=======
     name TEXT UNIQUE NOT NULL,
     description TEXT
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
 );
 
 CREATE TABLE IF NOT EXISTS medicines (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+<<<<<<< HEAD
+    name TEXT NOT NULL CHECK (length(name) BETWEEN 2 AND 80),
+    company TEXT NOT NULL CHECK (length(company) BETWEEN 2 AND 60),
+    category_id INTEGER NOT NULL,
+    hsn_code TEXT NOT NULL CHECK (length(hsn_code) <= 15),
+    gst_percent REAL NOT NULL CHECK (gst_percent >= 0),
+    rack_number TEXT CHECK (rack_number IS NULL OR length(rack_number) <= 5),
+=======
     name TEXT NOT NULL,
     company TEXT NOT NULL,
     category_id INTEGER NOT NULL,
     hsn_code TEXT NOT NULL,
     gst_percent REAL NOT NULL CHECK (gst_percent >= 0),
     rack_number TEXT,
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
     min_stock_alert INTEGER DEFAULT 10,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE RESTRICT
@@ -46,6 +66,22 @@ CREATE TABLE IF NOT EXISTS medicines (
 -- 3. SUPPLIERS & CUSTOMERS
 CREATE TABLE IF NOT EXISTS suppliers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+<<<<<<< HEAD
+    name TEXT NOT NULL CHECK (length(name) BETWEEN 2 AND 40),
+    phone TEXT CHECK (phone IS NULL OR length(phone) <= 15),
+    gstin TEXT CHECK (gstin IS NULL OR length(gstin) <= 15),
+    address TEXT CHECK (address IS NULL OR length(address) <= 200),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+-- gstin not null, phone not null
+
+-- DON'T THINK IT IS GOOD TO KEEP CUSTOMER TABLE SEPARATELY INSTEAD MERGE IT IN SALES
+CREATE TABLE IF NOT EXISTS customers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL CHECK (length(name) BETWEEN 2 AND 30),
+    phone TEXT CHECK (phone IS NULL OR length(phone) <= 15),
+    address TEXT CHECK (address IS NULL OR length(address) <= 200),
+=======
     name TEXT NOT NULL,
     phone TEXT,
     gstin TEXT,
@@ -58,6 +94,7 @@ CREATE TABLE IF NOT EXISTS customers (
     name TEXT NOT NULL,
     phone TEXT,
     address TEXT,
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -65,7 +102,11 @@ CREATE TABLE IF NOT EXISTS customers (
 CREATE TABLE IF NOT EXISTS medicine_batches (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     medicine_id INTEGER NOT NULL,
+<<<<<<< HEAD
+    batch_number TEXT NOT NULL CHECK (length(batch_number) BETWEEN 2 AND 50),
+=======
     batch_number TEXT NOT NULL,
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
     expiry_date DATE NOT NULL,
     purchase_price REAL NOT NULL CHECK (purchase_price >= 0),
     selling_price REAL NOT NULL CHECK (selling_price >= 0),
@@ -80,7 +121,11 @@ CREATE TABLE IF NOT EXISTS medicine_batches (
 CREATE TABLE IF NOT EXISTS purchases (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     supplier_id INTEGER NOT NULL,
+<<<<<<< HEAD
+    invoice_number TEXT NOT NULL CHECK (length(invoice_number) BETWEEN 2 AND 50),
+=======
     invoice_number TEXT NOT NULL,
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
     invoice_date DATE NOT NULL,
     total_amount REAL NOT NULL CHECK (total_amount >= 0),
     gst_amount REAL NOT NULL CHECK (gst_amount >= 0),
@@ -99,6 +144,10 @@ CREATE TABLE IF NOT EXISTS purchase_items (
     FOREIGN KEY (purchase_id) REFERENCES purchases (id) ON DELETE CASCADE,
     FOREIGN KEY (batch_id) REFERENCES medicine_batches (id)
 );
+<<<<<<< HEAD
+-- adding category to the med
+=======
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
 
 -- 6. PURCHASE RETURNS
 CREATE TABLE IF NOT EXISTS purchase_returns (
@@ -122,7 +171,11 @@ CREATE TABLE IF NOT EXISTS purchase_return_items (
 -- 7. SALES & SALE ITEMS
 CREATE TABLE IF NOT EXISTS sales (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+<<<<<<< HEAD
+    invoice_number TEXT UNIQUE NOT NULL CHECK (length(invoice_number) BETWEEN 2 AND 50),
+=======
     invoice_number TEXT UNIQUE NOT NULL,
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
     customer_id INTEGER,
     user_id INTEGER NOT NULL,
     subtotal REAL NOT NULL,
@@ -204,6 +257,32 @@ CREATE TABLE IF NOT EXISTS settings (
     value TEXT NOT NULL
 );
 
+<<<<<<< HEAD
+-- 12. TRACKING & NOTIFICATIONS
+CREATE TABLE IF NOT EXISTS notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    title TEXT NOT NULL,
+    message TEXT NOT NULL,
+    type TEXT DEFAULT 'INFO',
+    is_read INTEGER DEFAULT 0 CHECK (is_read IN (0, 1)),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS activity_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    action TEXT NOT NULL,
+    entity_type TEXT,
+    entity_id INTEGER,
+    details TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+=======
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
 -- ========================================================
 -- INDEXES (FOR INSTANT SEARCH & REPORTING SPEED)
 -- ========================================================
@@ -212,6 +291,11 @@ CREATE INDEX IF NOT EXISTS idx_batches_expiry ON medicine_batches(expiry_date);
 CREATE INDEX IF NOT EXISTS idx_batches_stock ON medicine_batches(current_stock);
 CREATE INDEX IF NOT EXISTS idx_sales_invoice ON sales(invoice_number);
 CREATE INDEX IF NOT EXISTS idx_stock_movements_batch ON stock_movements(batch_id);
+<<<<<<< HEAD
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_user ON activity_logs(user_id, created_at DESC);
+=======
+>>>>>>> 43b5d7b3695019edf9d5cee36a64aee4978fe7bb
 
 -- ========================================================
 -- TRIGGERS (AUTOMATIC STOCK REDUCTION & MOVEMENTS AUDIT)
